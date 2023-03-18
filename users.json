@@ -1,0 +1,15 @@
+[
+  {
+    "id": 1,
+    "gender": "Male",
+    "name": { "title": "Mr", "first": "John", "last": "Doe" },
+    "contact": { "email": "john.doe@example.com", "phone": "555-555-5555" },
+    "address": {
+      "street": "123 Main St",
+      "city": "New York",
+      "state": "NY",
+      "zip": "10001"
+    },
+    "photoUrl": "https://randomuser.me/api/portraits/men/1.jpg"
+  }
+]
