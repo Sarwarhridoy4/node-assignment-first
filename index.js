@@ -23,7 +23,18 @@ app.get('/user/random', (req, res) => {
     });
 });
   
+//api for getting all user
 
+app.get('/user/all', (req, res) => {
+    fs.readFile('./users.json', 'utf8', (err, data) => {
+      if (err) throw err;
+      let users = JSON.parse(data);
+      if (req.query.limit && !isNaN(parseInt(req.query.limit))) {
+        users = users.slice(0, parseInt(req.query.limit));
+      }
+      res.send(users);
+    });
+  });
 
 
 app.listen(PORT, () => {
