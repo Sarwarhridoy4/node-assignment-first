@@ -56,6 +56,33 @@ app.get('/user/all', (req, res) => {
     });
   });
 
+
+  // updade specefic user with id
+
+
+  app.patch('/user/update/:id', (req, res) => {
+    const userId = parseInt(req.params.id);
+    if (isNaN(userId)) {
+      res.status(400).send('Invalid user id');
+      return;
+    }
+    const userUpdates = req.body;
+    fs.readFile('./users.json', 'utf8', (err, data) => {
+      if (err) throw err;
+      let users = JSON.parse(data);
+      let userIndex = users.findIndex((user) => user.id === userId);
+      if (userIndex === -1) {
+        res.status(404).send(`User with id ${userId} not found`);
+        return;
+      }
+      users[userIndex] = { ...users[userIndex], ...userUpdates };
+      fs.writeFile('./users.json', JSON.stringify(users), (err) => {
+        if (err) throw err;
+        res.send(`User with id ${userId} updated successfully`);
+      });
+    });
+  });
+
 app.listen(PORT, () => {
   console.log(`Server listening on port ${PORT}`);
 });
