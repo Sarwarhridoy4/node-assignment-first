@@ -37,6 +37,25 @@ app.get('/user/all', (req, res) => {
   });
 
 
+  //save new user in database
+
+  app.post('/user/save', (req, res) => {
+    const user = req.body;
+    if (!user.id || !user.gender || !user.name || !user.contact || !user.address || !user.photoUrl) {
+      res.status(400).send('All fields are required');
+      return;
+    }
+    fs.readFile('./users.json', 'utf8', (err, data) => {
+      if (err) throw err;
+      let users = JSON.parse(data);
+      users.push(user);
+      fs.writeFile('./users.json', JSON.stringify(users), (err) => {
+        if (err) throw err;
+        res.send(`User with id ${user.id} saved successfully`);
+      });
+    });
+  });
+
 app.listen(PORT, () => {
   console.log(`Server listening on port ${PORT}`);
 });
