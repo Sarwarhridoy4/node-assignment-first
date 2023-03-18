@@ -134,8 +134,11 @@ app.get('/user/all', (req, res) => {
     });
     });
 
+// entry point
+app.get('/',(req, res)=> {
+    res.send(`Wellcome to CURD Server...`)
+})
 
-    
 app.listen(PORT, () => {
   console.log(`Server listening on port ${PORT}`);
 });
