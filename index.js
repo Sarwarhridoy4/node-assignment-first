@@ -83,6 +83,32 @@ app.get('/user/all', (req, res) => {
     });
   });
 
+
+
+  // update user in bulk
+
+  app.patch('/user/bulk-update', (req, res) => {
+    const userIds = req.body;
+    if (!Array.isArray(userIds) || userIds.some((id) => isNaN(parseInt(id)))) {
+      res.status(400).send('Invalid user ids');
+      return;
+    }
+    fs.readFile('./users.json', 'utf8', (err, data) => {
+      if (err) throw err;
+      let users = JSON.parse(data);
+      users = users.map((user) => {
+        if (userIds.includes(user.id.toString())) {
+          return { ...user, ...req.body };
+        }
+        return user;
+      });
+      fs.writeFile('./users.json', JSON.stringify(users), (err) => {
+        if (err) throw err;
+        res.send('Users updated successfully');
+      });
+    });
+  });
+
 app.listen(PORT, () => {
   console.log(`Server listening on port ${PORT}`);
 });
