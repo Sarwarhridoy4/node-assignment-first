@@ -109,6 +109,33 @@ app.get('/user/all', (req, res) => {
     });
   });
 
+
+  // api for deteting a specific user
+
+  app.delete('/user/delete/:id', (req, res) => {
+    const userId = parseInt(req.params.id);
+    if (isNaN(userId)) {
+    res.status(400).send('Invalid user id');
+    return;
+    }
+    fs.readFile('./users.json', 'utf8', (err, data) => {
+    if (err) throw err;
+    let users = JSON.parse(data);
+    const userIndex = users.findIndex((user) => user.id === userId);
+    if (userIndex === -1) {
+    res.status(404).send(`User with id ${userId} not found`);
+    return;
+    }
+    users.splice(userIndex, 1);
+    fs.writeFile('./users.json', JSON.stringify(users), (err) => {
+    if (err) throw err;
+    res.send(`User with id ${userId} deleted successfully`);
+    });
+    });
+    });
+
+
+    
 app.listen(PORT, () => {
   console.log(`Server listening on port ${PORT}`);
 });
